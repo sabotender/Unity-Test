@@ -1,0 +1,29 @@
+Dictionary<string, Genre> dic = new Dictionary<string, Genre>();
+
+for (int i = 0; i < genres.Length; i++)
+{
+    if (dic.ContainsKey(genres[i]) == false)
+        dic.Add(genres[i], new Genre());
+
+    dic[genres[i]].songs.Add(new Song(i, int.Parse(plays[i])));
+    dic[genres[i]].genrePlayCount += int.Parse(plays[i]);
+}
+
+List<int> answerList = new List<int>();
+
+foreach (var item in dic.OrderByDescending(x => x.Value.genrePlayCount))
+{
+    item.Value.songs.Sort(delegate (Song a, Song b)
+    {
+        return b.playCount - a.playCount;
+    });
+
+    if (item.Value.songs.Count != 0)
+    {
+        answerList.Add(item.Value.songs[0].idx);
+        if(item.Value.songs.Count > 1)
+            answerList.Add(item.Value.songs[1].idx);
+    }
+}
+
+answer = answerList.ToArray();
